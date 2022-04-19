@@ -1,0 +1,16 @@
+body {
+    margin: 0px auto; 
+    background-color: #f1f2f2;
+}
+
+div.middlediv {
+    background-color: white;
+    position: fixed;
+    width: 50%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    bottom: 0;
+    height: 90%;
+    z-index: -1;
+}

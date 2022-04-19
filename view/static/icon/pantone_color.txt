@@ -1,0 +1,4 @@
+blue: #0f4c81
+white: #f1efe0
+green: #3c9052
+red: b1261d

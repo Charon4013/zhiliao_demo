@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zhiliao Login</title>
+
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/index.css">
+</head>
+<body>
+    <div class="container-fluid">
+        
+
+        <div class="row middlediv" style="overflow-y:auto">
+            <div class="container">
+                <form name="loginForm" method="post">
+                <!-- <form method="post"> -->
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" placeholder="用户名用户名？！" required>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" id="email" placeholder="登录不用输邮箱哦，输了我也不用呢嘿嘿" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input class="form-control" id="password" placeholder="数字字母特殊字符都用起来~" onfocus="this.type='password'" required>
+                    </div>
+                    <!-- <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" required>
+                        <label class="form-check-label">如果没有注册，登录即注册</label>
+                    </div> -->
+                    <div class="form-group">
+                        <small class="text-muted">©致敬知乎去广告Xposed插件<a href="https://github.com/shatyuka/Zhiliao">知了</a></small>
+                    </div>
+                </form>
+                <button type="button" class="btn btn-primary" onclick="login()">登录</button>
+                <button type="button" class="btn btn-outline-primary" onclick="register()">注册</button>
+                <button type="button" class="btn btn-origin" data-container="body" data-toggle="popover" title="那没办法了" data-content="我没写，收拾收拾跑路咯">忘记密码了？</button>
+            </div>
+        </div>
+</body>
+<script>
+    function login() {
+
+        if (loginForm.username.value === "" || loginForm.password.value === "") {
+            console.log("别漏输内容了")
+            alert("别漏输内容了")
+        } else {
+            axios.post('/user/login', {
+                "username": loginForm.username.value,
+                "password": loginForm.password.value
+                // "email": loginForm.email.value       
+            }).then(function (response) {
+                // console.log(response.data.data)                      
+                if (response.data.data != null) {
+                    localStorage["token"] = response.data.data.token
+                    localStorage["username"] = response.data.data.username
+                    localStorage["uid"] = response.data.data.Id
+                    localStorage["manage"] = response.data.data.manage
+                }
+                if (response.data.code != 0) {
+                    alert(response.data.msg)
+                } else {
+                    window.location.href = "/"
+                }
+            }).catch(function (error) {
+                console.log(error);
+            })
+        }
+    };
+
+    function register() {
+        if (loginForm.username.value === "" || loginForm.password.value === "" || loginForm.email.value === "") {
+            console.log("别漏输内容了")
+            alert("别漏输内容了")
+        } else {
+            let userObj = JSON.stringify({
+                "username": loginForm.username.value,
+                "password": loginForm.password.value,
+                "email": loginForm.email.value
+            })
+
+            axios.post('/user/register', {
+                username: loginForm.username.value,
+                password: loginForm.password.value,
+                email: loginForm.email.value
+            }).then(function (response) {
+                console.log("注册response")
+                console.log("response.data:", response.data)
+                
+                if (response.data.data != null) {
+                    localStorage["token"] = response.data.data.token
+                    localStorage["username"] = response.data.data.username
+                    localStorage["uid"] = response.data.data.Id
+                    localStorage["manage"] = response.data.data.manage
+                }
+                if (response.data.code != 0) {
+                    alert(response.data.msg)
+                } else {
+                    window.location.href = "/"
+                }
+            }).catch(function (error) {
+                console.log(error);
+            })
+        }   
+    };
+    // popover好像没生效
+    // $(function () {
+    //     $('.example-popover').popover({
+    //         container: 'body'
+    //     })
+    // })
+    
+    
+</script>
+
+<script src="/static/js/jquery-3.6.0.slim.min.js" crossorigin="anonymous"></script>
+<script src="/static/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/static/js/axios.min.js"></script>
+</html>
